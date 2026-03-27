@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BackgroundScroller : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     void Start()
     {
