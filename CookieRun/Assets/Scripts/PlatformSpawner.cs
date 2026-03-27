@@ -31,12 +31,8 @@ public class PlatformSpawner : MonoBehaviour
     {        
         if (platforms[currentIndex].transform.position.x < 0)
         {
-            Debug.Log("(platforms[currentIndex].transform.position.x < 0)");
-
             if (platforms[currentIndex].transform.position.x < -20.48f)
             {
-                Debug.Log("(platforms[currentIndex].transform.position.x < -20.48f)");
-
                 platforms[currentIndex].SetActive(false);
 
                 platforms[currentIndex].transform.position = transform.position;
@@ -45,8 +41,6 @@ public class PlatformSpawner : MonoBehaviour
 
             else
             {
-                Debug.Log("NOT (platforms[currentIndex].transform.position.x < -20.48f)");
-
                 while (currentIndex == nextIndex)
                 {
                     nextIndex = Random.Range(0, platforms.Length);

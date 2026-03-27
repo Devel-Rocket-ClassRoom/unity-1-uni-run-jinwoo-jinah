@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
 
     private bool isDead;
 
+    GameManager gameManager;
+
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -28,11 +30,23 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isGrounded", isGrounded);
         animator.SetBool("isSliding", isSliding);
         animator.SetBool("isDead", isDead);
+
+        gameManager = GameObject.FindWithTag("GameController").GetComponent<GameManager>();
     }
 
     void Update()
     {
-        if (isDead) return;
+        if (gameManager.isGameOver)
+        {
+            if (isDead)
+            {
+                return;
+            }
+
+            animator.SetTrigger("Dead");
+            isDead = true;
+            return;
+        }
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && !isSliding && jumpCount < 2)
         {
@@ -65,15 +79,22 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Dead"))
+        if (collision.CompareTag("Dead") && !isDead)
         {
             isDead = true;
-            animator.SetBool("isDead", true);
+            gameManager.isGameOver = true;
+            animator.SetTrigger("Dead");
+            rigid.bodyType = RigidbodyType2D.Kinematic;
+        }
+
+        else if (collision.CompareTag("Obstacle"))
+        {
+            gameManager.HitObstacle();
         }
 
         else if (collision.CompareTag("Coin"))
         {
-            // 점수 올리기 + 에너지 회복
+            gameManager.GetCoin();
             collision.gameObject.SetActive(false);  // 코인 비활성화
         }
     }
